@@ -26,8 +26,7 @@ body {
 .btn-book,
 .btn-pay,
 .auth-button,
-button[type="submit"],
-.social-btn:hover {
+button[type="submit"] {
     background-color: #ff6b35 !important;
     color: white !important;
     border: none !important;
@@ -37,11 +36,6 @@ button[type="submit"],
     background-color: transparent !important;
     color: #ff6b35 !important;
     border: 2px solid #ff6b35 !important;
-}
-
-.btn-secondary:hover {
-    background-color: #ff6b35 !important;
-    color: white !important;
 }
 
 /* Sidebar always visible */
