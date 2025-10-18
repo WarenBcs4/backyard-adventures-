@@ -278,4 +278,15 @@ document.querySelectorAll('.gallery-item').forEach(item => {
     });
 });
 
+// Mobile menu functionality
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('nav-menu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    
+    if (navMenu && menuBtn) {
+        navMenu.classList.toggle('active');
+        menuBtn.classList.toggle('active');
+    }
+}
+
 console.log('Backyard Adventures website loaded successfully!');

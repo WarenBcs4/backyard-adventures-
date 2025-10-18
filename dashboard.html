@@ -2,33 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#667eea">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Dashboard - Backyard Adventures</title>
     <link rel="icon" href="data:,">
     <link rel="manifest" href="manifest.json">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="css/dashboard.css" as="style">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/mobile.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script>
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.mobile-overlay');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            menuBtn.classList.toggle('active');
-        }
-    </script>
+
 </head>
 <body>
     <!-- Navigation -->
     <nav class="dashboard-nav">
         <div class="nav-container">
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -44,7 +37,7 @@
     </nav>
 
     <div class="dashboard-container">
-        <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+        <div class="mobile-overlay" id="mobile-overlay"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-menu">
@@ -175,6 +168,13 @@
 
         </main>
     </div>
+    
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+
 
     <!-- Tour Modal -->
     <div id="tour-modal" class="modal">
@@ -246,11 +246,6 @@
                 toggleMobileMenu();
             }
         });
-        
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
-        }
     </script>
 </body>
 </html>

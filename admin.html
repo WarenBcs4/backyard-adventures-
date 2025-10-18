@@ -2,25 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Backyard Adventures</title>
-    <link rel="icon" href="data:,">
-    <link rel="preload" href="css/styles.css" as="style">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/forms.css">
     <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
     <nav class="admin-nav">
         <div class="nav-container">
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <h2>Backyard Adventures - Admin</h2>
+            <h2>Backyard Adventures - Administrative Portal</h2>
             <div class="nav-menu">
                 <span id="admin-name">Admin</span>
                 <button onclick="logout()" class="logout-btn">Logout</button>
@@ -29,8 +20,7 @@
     </nav>
 
     <div class="admin-container">
-        <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
-        <aside class="admin-sidebar" id="sidebar">
+        <aside class="admin-sidebar">
             <div class="sidebar-menu">
                 <a href="dashboard.html" class="menu-item">Main Dashboard</a>
                 <a href="#" onclick="showSection('analytics')" class="menu-item active">Analytics</a>
@@ -404,16 +394,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.mobile-overlay');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            menuBtn.classList.toggle('active');
-        }
-    </script>
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>

@@ -15,7 +15,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize dashboard
     initializeDashboard();
     loadDashboardData();
+    
+    // Mobile menu functionality
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const overlay = document.getElementById('mobile-overlay');
+    
+    if (menuBtn) {
+        menuBtn.addEventListener('click', toggleMobileMenu);
+    }
+    if (overlay) {
+        overlay.addEventListener('click', toggleMobileMenu);
+    }
 });
+
+function toggleMobileMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    
+    if (sidebar) sidebar.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
+    if (menuBtn) menuBtn.classList.toggle('active');
+}
 
 function initializeDashboard() {
     // Set user name
