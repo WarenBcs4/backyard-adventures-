@@ -1,0 +1,78 @@
+/* Orange Theme Styles */
+body {
+    background-color: transparent !important;
+}
+
+/* White card backgrounds */
+.service-card,
+.stat-card,
+.booking-item,
+.payment-item,
+.message-item,
+.subscriber-item,
+.item-card,
+.gallery-item,
+.modal-content,
+.auth-form,
+.contact-content,
+.newsletter {
+    background-color: white !important;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Orange buttons */
+.btn-primary,
+.btn-book,
+.btn-pay,
+.auth-button,
+button[type="submit"],
+.social-btn:hover {
+    background-color: #ff6b35 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.btn-secondary {
+    background-color: transparent !important;
+    color: #ff6b35 !important;
+    border: 2px solid #ff6b35 !important;
+}
+
+.btn-secondary:hover {
+    background-color: #ff6b35 !important;
+    color: white !important;
+}
+
+/* Sidebar always visible */
+@media (min-width: 769px) {
+    .mobile-menu-btn {
+        display: none !important;
+    }
+    
+    .sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 70px !important;
+        width: 250px !important;
+        height: calc(100vh - 70px) !important;
+        background: white !important;
+        z-index: 100;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+    
+    .main-content {
+        margin-left: 250px !important;
+    }
+    
+    .dashboard-container {
+        padding-top: 70px !important;
+    }
+}
+
+/* Mobile sidebar */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+}
