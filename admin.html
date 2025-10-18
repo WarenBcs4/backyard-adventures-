@@ -15,7 +15,8 @@
 <body>
     <nav class="admin-nav">
         <div class="nav-container">
-            <h2>Backyard Adventures - Administrative Portal</h2>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <h2>Backyard Adventures - Admin</h2>
             <div class="nav-menu">
                 <span id="admin-name">Admin</span>
                 <button onclick="logout()" class="logout-btn">Logout</button>
@@ -24,7 +25,8 @@
     </nav>
 
     <div class="admin-container">
-        <aside class="admin-sidebar">
+        <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+        <aside class="admin-sidebar" id="sidebar">
             <div class="sidebar-menu">
                 <a href="dashboard.html" class="menu-item">Main Dashboard</a>
                 <a href="#" onclick="showSection('analytics')" class="menu-item active">Analytics</a>
@@ -398,6 +400,14 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
