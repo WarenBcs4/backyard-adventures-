@@ -1,0 +1,231 @@
+/* Hide mobile elements on desktop */
+.mobile-menu-btn {
+    display: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    /* Navigation */
+    .dashboard-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+    
+    .nav-logo h2 {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+    
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    #user-name {
+        display: none;
+    }
+    
+    .logout-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Dashboard Container */
+    .dashboard-container {
+        padding-top: 60px;
+        position: relative;
+    }
+    
+    /* Mobile Overlay */
+    .mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+    }
+    
+    .mobile-overlay.active {
+        display: block;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 60px;
+        left: -280px;
+        width: 280px;
+        height: calc(100vh - 60px);
+        background: #fff;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .sidebar-menu {
+        padding: 1rem 0;
+    }
+    
+    .menu-item {
+        display: block;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    /* Main Content */
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+        min-height: calc(100vh - 60px);
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    /* Resources Grid */
+    .resources-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .resource-card {
+        padding: 1rem;
+    }
+    
+    .resource-card img {
+        height: 150px !important;
+    }
+    
+    /* Forms */
+    .profile-form {
+        max-width: 100%;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 0.75rem;
+    }
+    
+    /* Buttons */
+    .btn-book,
+    .btn-pay,
+    .btn-cancel {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        max-width: 400px;
+        margin: 2rem auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    /* Tables */
+    .bookings-list,
+    .payments-list {
+        overflow-x: auto;
+    }
+    
+    .booking-item,
+    .payment-item {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        background: #f9f9f9;
+    }
+    
+    /* Charts */
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+}
+
+/* Touch Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .menu-item:hover {
+        background: transparent;
+    }
+    
+    .menu-item:active {
+        background: #f0f0f0;
+    }
+    
+    button:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Very Small Screens */
+@media (max-width: 480px) {
+    .nav-logo h2 {
+        font-size: 1rem;
+    }
+    
+    .main-content {
+        padding: 0.5rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .modal-content {
+        width: 98%;
+        margin: 1rem auto;
+    }
+}

@@ -2,18 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Dashboard - Backyard Adventures</title>
     <link rel="icon" href="data:,">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="css/dashboard.css" as="style">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/forms.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="dashboard-nav">
         <div class="nav-container">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             <div class="nav-logo">
                 <h2>Backyard Adventures</h2>
             </div>
@@ -25,8 +32,9 @@
     </nav>
 
     <div class="dashboard-container">
+        <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-menu">
                 <a href="#" onclick="showSection('overview')" class="menu-item active">Overview</a>
                 <a href="#" onclick="showSection('available-resources')" class="menu-item">Book Now</a>
@@ -212,5 +220,25 @@
     <script src="js/client-booking.js"></script>
     <script src="js/client-records.js"></script>
     <script src="js/charts.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
+        // Close menu when clicking menu items
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('menu-item')) {
+                toggleMobileMenu();
+            }
+        });
+        
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
 </body>
 </html>
