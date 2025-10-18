@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backyard Adventures - Water Sports & Tours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Backyard Adventures</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="register.html" class="register-btn">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Experience Water Adventures Like Never Before</h1>
+            <p>Guided tours, water sports rentals, and unforgettable experiences on the water. Join thousands of adventurers who discovered their passion for water sports.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary">Book Adventure</a>
+                <a href="#about" class="btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About Backyard Adventures</h2>
+                <p>We provide premium water sports experiences with professional guides and top-quality equipment. From peaceful tours to thrilling adventures, we have something for everyone.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>Choose from our comprehensive range of water sports adventures and equipment rentals</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Guided Tours</h3>
+                    <p>Professional guided water tours with experienced captains and stunning scenic routes</p>
+                    <button class="btn-book" onclick="openBookingModal('tour')">Book Tour</button>
+                </div>
+                <div class="service-card">
+                    <h3>Equipment Rentals</h3>
+                    <p>High-quality boats, jet skis, kayaks, and paddleboards for your adventure</p>
+                    <button class="btn-book" onclick="openBookingModal('rental')">Rent Equipment</button>
+                </div>
+                <div class="service-card">
+                    <h3>Training Programs</h3>
+                    <p>Learn water sports with certified instructors in a safe, fun environment</p>
+                    <button class="btn-book" onclick="openBookingModal('training')">Start Training</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Adventure Gallery</h2>
+                <p>See the amazing experiences our customers have enjoyed</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="placeholder-img">Scenic Tours</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img">Water Sports</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img">Happy Customers</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-img">Equipment Rental</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to our newsletter for updates and special offers</p>
+            <form id="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Enter your email" required>
+                <input type="text" id="newsletter-name" placeholder="Your name" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p>Phone: (555) 123-4567</p>
+                    <p>Email: info@backyardadventures.com</p>
+                    <p>Address: 123 Marina Drive, Waterfront City</p>
+                </div>
+                <form id="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Chat Button -->
+    <div id="chat-button" class="chat-button" onclick="openChat()">
+        💬 Live Chat
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chat-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeChat()">&times;</span>
+            <h3>Live Chat Support</h3>
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Type your message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBookingModal()">&times;</span>
+            <h3 id="booking-title">Book Service</h3>
+            <form id="booking-form">
+                <input type="hidden" id="booking-type">
+                <div id="service-options"></div>
+                <input type="date" id="booking-date" required>
+                <input type="time" id="booking-time" required>
+                <input type="number" id="booking-people" placeholder="Number of people" min="1" required>
+                <textarea id="booking-notes" placeholder="Special requests or notes"></textarea>
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/paypal.js"></script>
+</body>
+</html>

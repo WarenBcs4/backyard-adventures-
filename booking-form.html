@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Adventure - Backyard Adventures</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+    <div class="booking-container">
+        <div class="form-container client-form">
+            <div class="form-header">
+                <h1 class="form-title">Book Your Adventure</h1>
+                <p class="form-subtitle">Choose your perfect water sports experience</p>
+            </div>
+
+            <div class="progress-steps">
+                <div class="step active">
+                    <span>1</span> Select Activity
+                </div>
+                <div class="step">
+                    <span>2</span> Details
+                </div>
+                <div class="step">
+                    <span>3</span> Payment
+                </div>
+            </div>
+
+            <form id="booking-form">
+                <div class="form-section">
+                    <h4 class="section-title">🏄 Choose Your Adventure</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">Activity Type</label>
+                        <select class="form-select" id="activity-type" required>
+                            <option value="">Select an activity</option>
+                            <option value="tour">🚤 Guided Tours</option>
+                            <option value="rental">🛥️ Equipment Rental</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="activity-options" style="display: none;">
+                        <label class="form-label required">Select Activity</label>
+                        <select class="form-select" id="activity-select" required>
+                            <option value="">Choose your activity</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="section-title">📅 When & How Many</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Date</label>
+                            <input type="date" class="form-input" id="booking-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Time</label>
+                            <input type="time" class="form-input" id="booking-time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Number of People</label>
+                            <input type="number" class="form-input" id="people-count" min="1" max="20" value="1" required>
+                        </div>
+                        <div class="form-group" id="duration-group" style="display: none;">
+                            <label class="form-label required">Duration</label>
+                            <select class="form-select" id="rental-duration">
+                                <option value="1">1 Hour</option>
+                                <option value="2">2 Hours</option>
+                                <option value="4">4 Hours</option>
+                                <option value="8">Full Day</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="section-title">💬 Additional Information</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Special Requests</label>
+                        <textarea class="form-textarea" id="special-requests" placeholder="Any dietary restrictions, accessibility needs, or special occasions?"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="section-title">💰 Pricing Summary</h4>
+                    
+                    <div class="pricing-summary">
+                        <div class="price-row">
+                            <span>Base Price:</span>
+                            <span id="base-price">$0.00</span>
+                        </div>
+                        <div class="price-row">
+                            <span>People (×<span id="people-multiplier">1</span>):</span>
+                            <span id="people-price">$0.00</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total Amount:</span>
+                            <span id="total-price">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                        ← Back
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Continue to Payment →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Booking form functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const activityType = document.getElementById('activity-type');
+            const activityOptions = document.getElementById('activity-options');
+            const activitySelect = document.getElementById('activity-select');
+            const durationGroup = document.getElementById('duration-group');
+            const peopleCount = document.getElementById('people-count');
+
+            // Load activities when type changes
+            activityType.addEventListener('change', async function() {
+                const type = this.value;
+                activityOptions.style.display = type ? 'block' : 'none';
+                durationGroup.style.display = type === 'rental' ? 'block' : 'none';
+
+                if (type) {
+                    try {
+                        const response = type === 'tour' ? await api.getTours() : await api.getRentals();
+                        const items = type === 'tour' ? response.tours : response.rentals;
+                        
+                        activitySelect.innerHTML = '<option value="">Choose your activity</option>';
+                        items.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.id;
+                            option.textContent = `${item.name} - $${type === 'tour' ? item.price : item.hourlyRate}${type === 'tour' ? '/person' : '/hour'}`;
+                            option.dataset.price = type === 'tour' ? item.price : item.hourlyRate;
+                            activitySelect.appendChild(option);
+                        });
+                    } catch (error) {
+                        console.error('Error loading activities:', error);
+                    }
+                }
+            });
+
+            // Update pricing when selections change
+            function updatePricing() {
+                const selectedOption = activitySelect.options[activitySelect.selectedIndex];
+                const basePrice = parseFloat(selectedOption?.dataset.price || 0);
+                const people = parseInt(peopleCount.value) || 1;
+                const duration = parseInt(document.getElementById('rental-duration')?.value || 1);
+                
+                const isRental = activityType.value === 'rental';
+                const total = isRental ? basePrice * duration : basePrice * people;
+
+                document.getElementById('base-price').textContent = `$${basePrice.toFixed(2)}`;
+                document.getElementById('people-multiplier').textContent = isRental ? duration : people;
+                document.getElementById('people-price').textContent = `$${total.toFixed(2)}`;
+                document.getElementById('total-price').textContent = `$${total.toFixed(2)}`;
+            }
+
+            activitySelect.addEventListener('change', updatePricing);
+            peopleCount.addEventListener('input', updatePricing);
+            document.getElementById('rental-duration')?.addEventListener('change', updatePricing);
+
+            // Set minimum date to today
+            document.getElementById('booking-date').min = new Date().toISOString().split('T')[0];
+        });
+    </script>
+
+    <style>
+        .booking-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .pricing-summary {
+            background: var(--gray-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .price-row.total {
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--gray-medium);
+            background: var(--gray-light);
+        }
+
+        .step span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gray-medium);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .step.active {
+            color: var(--primary-blue);
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .step.active span {
+            background: var(--primary-blue);
+        }
+
+        .step.completed {
+            color: var(--success-color);
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .step.completed span {
+            background: var(--success-color);
+        }
+    </style>
+</body>
+</html>

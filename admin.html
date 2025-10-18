@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Backyard Adventures</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <nav class="admin-nav">
+        <div class="nav-container">
+            <h2>Backyard Adventures - Administrative Portal</h2>
+            <div class="nav-menu">
+                <span id="admin-name">Admin</span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item">Main Dashboard</a>
+                <a href="#" onclick="showSection('analytics')" class="menu-item active">Analytics</a>
+                <a href="#" onclick="showSection('tours')" class="menu-item">Manage Tours</a>
+                <a href="#" onclick="showSection('rentals')" class="menu-item">Manage Rentals</a>
+                <a href="#" onclick="showSection('bookings')" class="menu-item">All Bookings</a>
+                <a href="#" onclick="showSection('newsletter')" class="menu-item">Newsletter</a>
+                <a href="#" onclick="showSection('staff')" class="menu-item">Staff Management</a>
+                <a href="#" onclick="showSection('profile')" class="menu-item">Profile</a>
+            </div>
+        </aside>
+
+        <main class="admin-content">
+            <!-- Analytics Section -->
+            <section id="analytics" class="admin-section active">
+                <div class="section-header">
+                    <h1>Analytics Dashboard</h1>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Monthly Revenue</h3>
+                        <canvas id="revenue-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Booking Types</h3>
+                        <canvas id="booking-types-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Daily Bookings</h3>
+                        <canvas id="daily-bookings-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Customer Growth</h3>
+                        <canvas id="customer-growth-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tours Management -->
+            <section id="tours" class="admin-section">
+                <div class="section-header">
+                    <h1>Manage Tours</h1>
+                    <button onclick="openTourModal()" class="btn-add">Add New Tour</button>
+                </div>
+                <div id="tours-list" class="items-grid"></div>
+            </section>
+
+            <!-- Rentals Management -->
+            <section id="rentals" class="admin-section">
+                <div class="section-header">
+                    <h1>Manage Rentals</h1>
+                    <button onclick="openRentalModal()" class="btn-add">Add New Rental</button>
+                </div>
+                <div id="rentals-list" class="items-grid"></div>
+            </section>
+
+            <!-- Bookings Management -->
+            <section id="bookings" class="admin-section">
+                <div class="section-header">
+                    <h1>All Bookings</h1>
+                </div>
+                <div id="bookings-list" class="bookings-grid"></div>
+            </section>
+
+            <!-- Newsletter Management -->
+            <section id="newsletter" class="admin-section">
+                <div class="section-header">
+                    <h1>Newsletter Management</h1>
+                    <button onclick="openNewsletterModal()" class="btn-add">Send Newsletter</button>
+                </div>
+                <div class="newsletter-stats">
+                    <div class="stat-card">
+                        <h3>Total Subscribers</h3>
+                        <div class="stat-number" id="total-subscribers">0</div>
+                    </div>
+                </div>
+                <div id="subscribers-list" class="items-grid"></div>
+            </section>
+
+            <!-- Staff Management -->
+            <section id="staff" class="admin-section">
+                <div class="section-header">
+                    <h1>Staff Management</h1>
+                    <button onclick="openStaffModal()" class="btn-add">Add Staff Member</button>
+                </div>
+                <div id="staff-list" class="items-grid"></div>
+            </section>
+
+            <!-- Profile Management -->
+            <section id="profile" class="admin-section">
+                <div class="section-header">
+                    <h1>Admin Profile</h1>
+                </div>
+                <form id="admin-profile-form" class="profile-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="admin-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="admin-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="admin-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" id="current-password">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirm-password">
+                    </div>
+                    <button type="submit">Update Profile</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Tour Modal -->
+    <div id="tour-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTourModal()">&times;</span>
+            <div class="form-container admin-form">
+                <div class="form-header">
+                    <h3 class="form-title" id="tour-modal-title">Add New Tour</h3>
+                    <p class="form-subtitle">Create a new tour experience for customers</p>
+                </div>
+                
+                <form id="tour-form">
+                    <input type="hidden" id="tour-id">
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Basic Information</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Tour Name</label>
+                            <input type="text" class="form-input" id="tour-name" placeholder="Enter tour name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Description</label>
+                            <textarea class="form-textarea" id="tour-description" placeholder="Describe the tour experience" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Duration & Pricing</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required">Duration (hours)</label>
+                                <input type="number" class="form-input" id="tour-duration" min="0.5" max="24" step="0.5" placeholder="2.5" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label required">Price ($)</label>
+                                <input type="number" class="form-input" id="tour-price" min="0" step="0.01" placeholder="99.00" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Capacity & Type</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required">Max Capacity</label>
+                                <input type="number" class="form-input" id="tour-capacity" min="1" placeholder="8" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label required">Tour Type</label>
+                                <select class="form-select" id="tour-type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Water Sports">Water Sports</option>
+                                    <option value="Sightseeing">Sightseeing</option>
+                                    <option value="Adventure">Adventure</option>
+                                    <option value="Training">Training</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Images & Availability</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tour Images</label>
+                            <input type="file" class="form-input" id="tour-images" multiple accept="image/*">
+                            <small>Upload multiple images for this tour</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Available Dates</label>
+                            <input type="text" class="form-input" id="tour-dates" placeholder="e.g., Mon-Fri, Weekends, Daily">
+                            <small>Specify when this tour is available</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Status</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Availability Status</label>
+                            <select class="form-select" id="tour-status">
+                                <option value="Active">Active - Available for booking</option>
+                                <option value="Inactive">Inactive - Hidden from customers</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group justify-end">
+                        <button type="button" onclick="closeTourModal()" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Tour</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rental Modal -->
+    <div id="rental-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRentalModal()">&times;</span>
+            <div class="form-container admin-form">
+                <div class="form-header">
+                    <h3 class="form-title" id="rental-modal-title">Add New Rental</h3>
+                    <p class="form-subtitle">Add equipment available for customer rental</p>
+                </div>
+                
+                <form id="rental-form">
+                    <input type="hidden" id="rental-id">
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Equipment Details</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Equipment Name</label>
+                            <input type="text" class="form-input" id="rental-name" placeholder="e.g., Sea-Doo GTX 155" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Category</label>
+                            <select class="form-select" id="rental-category" required>
+                                <option value="">Select Category</option>
+                                <option value="Boat">Boat</option>
+                                <option value="Jet Ski">Jet Ski</option>
+                                <option value="Kayak">Kayak</option>
+                                <option value="Paddleboard">🏄‍♀️ Paddleboard</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Description</label>
+                            <textarea class="form-textarea" id="rental-description" placeholder="Describe the equipment features and specifications" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Pricing</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required">Hourly Rate ($)</label>
+                                <input type="number" class="form-input" id="rental-hourly" min="0" step="0.01" placeholder="25.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label required">Daily Rate ($)</label>
+                                <input type="number" class="form-input" id="rental-daily" min="0" step="0.01" placeholder="150.00" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Images</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Equipment Images</label>
+                            <input type="file" class="form-input" id="rental-images" multiple accept="image/*">
+                            <small>Upload multiple images of the equipment</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4 class="section-title">Availability</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required">Quantity Available</label>
+                                <input type="number" class="form-input" id="rental-quantity" min="1" placeholder="3" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="rental-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Rented">Currently Rented</option>
+                                    <option value="Maintenance">Under Maintenance</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group justify-end">
+                        <button type="button" onclick="closeRentalModal()" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Rental</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Modal -->
+    <div id="newsletter-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewsletterModal()">&times;</span>
+            <h3>Send Newsletter</h3>
+            <form id="newsletter-form">
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="newsletter-subject" required>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea id="newsletter-message" rows="6" required></textarea>
+                </div>
+                <button type="submit">Send to All Subscribers</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Staff Modal -->
+    <div id="staff-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStaffModal()">&times;</span>
+            <h3>Add Staff Member</h3>
+            <form id="staff-form">
+                <input type="hidden" id="staff-id">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="staff-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="staff-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="staff-phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="staff-role" required>
+                        <option value="">Select Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Guide">Guide</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="staff-password" required>
+                </div>
+                <button type="submit">Add Staff Member</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>

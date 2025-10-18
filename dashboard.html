@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Backyard Adventures</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Backyard Adventures</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="user-name">Welcome, User</span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="#" onclick="showSection('overview')" class="menu-item active">Overview</a>
+                <a href="#" onclick="showSection('available-resources')" class="menu-item">Book Now</a>
+                <a href="#" onclick="showSection('bookings')" class="menu-item">My Bookings</a>
+                <a href="#" onclick="showSection('payments')" class="menu-item">Payments</a>
+                <a href="#" onclick="showSection('profile')" class="menu-item">Profile</a>
+                
+                <!-- Admin Only Sections -->
+                <div id="admin-menu" style="display: none;">
+                    <hr>
+                    <a href="admin.html" class="menu-item">Admin Panel</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="dashboard-section active">
+                <h1>Dashboard Overview</h1>
+                
+                <!-- Client Overview -->
+                <div id="client-overview">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Upcoming Bookings</h3>
+                            <div class="stat-number" id="upcoming-bookings">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Spent</h3>
+                            <div class="stat-number" id="total-spent">$0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Adventures Completed</h3>
+                            <div class="stat-number" id="completed-adventures">0</div>
+                        </div>
+                    </div>
+                    <div class="client-actions">
+                        <button onclick="sendMessage()" class="btn-message">Send Message to Support</button>
+                    </div>
+                </div>
+
+                <!-- Admin Overview -->
+                <div id="admin-overview" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Today's Bookings</h3>
+                            <div class="stat-number" id="today-bookings">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Monthly Revenue</h3>
+                            <div class="stat-number" id="monthly-revenue">$0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Clients</h3>
+                            <div class="stat-number" id="active-clients">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Pending Messages</h3>
+                            <div class="stat-number" id="pending-messages">0</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Available Resources Section -->
+            <section id="available-resources" class="dashboard-section">
+                <h1>Available for Booking</h1>
+                <div class="resources-container">
+                    <div class="tours-section">
+                        <h2>Tours & Training</h2>
+                        <div id="tours-grid" class="resources-grid"></div>
+                    </div>
+                    <div class="rentals-section">
+                        <h2>Equipment Rentals</h2>
+                        <button onclick="openRentalBooking()" class="btn-book" style="margin-bottom: 20px;">Book Rental</button>
+                        <div id="rentals-grid" class="resources-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="bookings" class="dashboard-section">
+                <h1>My Bookings</h1>
+                <div class="bookings-container">
+                    <div class="booking-filters">
+                        <select id="booking-filter">
+                            <option value="all">All Bookings</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
+                    </div>
+                    <div id="bookings-list" class="bookings-list"></div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="dashboard-section">
+                <h1>Profile Settings</h1>
+                <form id="profile-form" class="profile-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="profile-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="profile-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="profile-phone" required>
+                    </div>
+                    <button type="submit">Update Profile</button>
+                </form>
+            </section>
+
+            <!-- Payments Section -->
+            <section id="payments" class="dashboard-section">
+                <h1>Payment History</h1>
+                <div id="payments-list" class="payments-list"></div>
+            </section>
+
+
+        </main>
+    </div>
+
+    <!-- Tour Modal -->
+    <div id="tour-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTourModal()">&times;</span>
+            <h3>Add/Edit Tour</h3>
+            <form id="tour-form">
+                <input type="hidden" id="tour-id">
+                <input type="text" id="tour-name" placeholder="Tour Name" required>
+                <textarea id="tour-description" placeholder="Description" required></textarea>
+                <input type="number" id="tour-duration" placeholder="Duration (hours)" required>
+                <input type="number" id="tour-price" placeholder="Price" step="0.01" required>
+                <input type="number" id="tour-capacity" placeholder="Max Capacity" required>
+                <select id="tour-type" required>
+                    <option value="">Select Type</option>
+                    <option value="Water Sports">Water Sports</option>
+                    <option value="Sightseeing">Sightseeing</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Training">Training</option>
+                </select>
+                <button type="submit">Save Tour</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rental Modal -->
+    <div id="rental-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRentalModal()">&times;</span>
+            <h3>Add/Edit Rental</h3>
+            <form id="rental-form">
+                <input type="hidden" id="rental-id">
+                <input type="text" id="rental-name" placeholder="Equipment Name" required>
+                <select id="rental-category" required>
+                    <option value="">Select Category</option>
+                    <option value="Boat">Boat</option>
+                    <option value="Jet Ski">Jet Ski</option>
+                    <option value="Kayak">Kayak</option>
+                    <option value="Paddleboard">Paddleboard</option>
+                    <option value="Other">Other</option>
+                </select>
+                <textarea id="rental-description" placeholder="Description" required></textarea>
+                <input type="number" id="rental-hourly-rate" placeholder="Hourly Rate" step="0.01" required>
+                <input type="number" id="rental-daily-rate" placeholder="Daily Rate" step="0.01" required>
+                <input type="number" id="rental-quantity" placeholder="Quantity Available" required>
+                <button type="submit">Save Rental</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/client-booking.js"></script>
+    <script src="js/client-records.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>
