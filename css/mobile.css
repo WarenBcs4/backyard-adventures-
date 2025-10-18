@@ -25,13 +25,68 @@ body {
     overflow-x: hidden;
 }
 
-/* Hide mobile elements on desktop */
-.mobile-menu-btn {
-    display: none;
+/* Show mobile menu button on mobile screens */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+    
+    /* Homepage navbar mobile */
+    .navbar .mobile-menu-btn {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 30px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .navbar .mobile-menu-btn span {
+        width: 25px;
+        height: 3px;
+        background: #333;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+    
+    .navbar .nav-menu {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background: white;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding-top: 2rem;
+        transition: left 0.3s ease;
+        z-index: 999;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar .nav-menu.active {
+        left: 0;
+    }
+    
+    .navbar .nav-menu a {
+        margin: 1rem 0;
+        font-size: 1.2rem;
+    }
 }
 
-.mobile-overlay {
-    display: none;
+/* Hide mobile elements on desktop */
+@media (min-width: 769px) {
+    .mobile-menu-btn {
+        display: none !important;
+    }
+    
+    .mobile-overlay {
+        display: none !important;
+    }
 }
 
 /* Mobile Optimizations */
