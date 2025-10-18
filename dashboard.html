@@ -19,8 +19,10 @@
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.mobile-overlay');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
+            menuBtn.classList.toggle('active');
         }
     </script>
 </head>
@@ -28,7 +30,11 @@
     <!-- Navigation -->
     <nav class="dashboard-nav">
         <div class="nav-container">
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-logo">
                 <h2>Backyard Adventures</h2>
             </div>

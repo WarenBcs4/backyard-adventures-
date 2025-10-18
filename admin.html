@@ -15,7 +15,11 @@
 <body>
     <nav class="admin-nav">
         <div class="nav-container">
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <h2>Backyard Adventures - Admin</h2>
             <div class="nav-menu">
                 <span id="admin-name">Admin</span>
@@ -404,8 +408,10 @@
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.mobile-overlay');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
+            menuBtn.classList.toggle('active');
         }
     </script>
     <script src="js/config.js"></script>
