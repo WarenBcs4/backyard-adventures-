@@ -190,6 +190,54 @@
     }
 }
 
+/* Mobile Form Styles */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95% !important;
+        max-width: 350px !important;
+        margin: 1rem auto !important;
+        padding: 1rem !important;
+    }
+    
+    .auth-container {
+        max-width: 350px !important;
+        padding: 1rem !important;
+        margin: 1rem auto !important;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"],
+    textarea,
+    select {
+        font-size: 14px !important;
+        padding: 0.6rem !important;
+        height: auto !important;
+        min-height: 40px !important;
+    }
+    
+    button,
+    .btn-primary,
+    .btn-secondary {
+        font-size: 14px !important;
+        padding: 0.7rem 1rem !important;
+        min-height: 44px !important;
+    }
+    
+    label {
+        font-size: 13px !important;
+        margin-bottom: 0.3rem !important;
+    }
+    
+    .form-group {
+        margin-bottom: 0.8rem !important;
+    }
+}
+
 /* Small mobile */
 @media (max-width: 480px) {
     .nav-logo h2 {
@@ -199,4 +247,120 @@
     .main-content {
         padding: 0.75rem !important;
     }
+    
+    .modal-content,
+    .auth-container {
+        max-width: 300px !important;
+        padding: 0.8rem !important;
+    }
+    
+    input, textarea, select, button {
+        font-size: 13px !important;
+        padding: 0.5rem !important;
+    }
+    
+    .social-btn {
+        font-size: 13px !important;
+        padding: 0.6rem !important;
+    }
+    
+    /* All form text max 13px */
+    .auth-logo {
+        font-size: 13px !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.3rem !important;
+    }
+    
+    .auth-title {
+        font-size: 13px !important;
+        line-height: 1.2 !important;
+        margin: 0.3rem 0 !important;
+    }
+    
+    .auth-subtitle {
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .auth-header {
+        margin-bottom: 1rem !important;
+    }
+    
+    .auth-container {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+    }
+    
+    h1, h2, h3 {
+        font-size: 13px !important;
+        line-height: 1.2 !important;
+        margin: 0.3rem 0 !important;
+    }
+    
+    p, span, div {
+        font-size: 12px !important;
+    }
+}
+
+/* Social Login Button Styles */
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 0.5rem;
+}
+
+.social-btn:hover {
+    background: #f8f9fa;
+    border-color: #ccc;
+}
+
+.google-btn:hover {
+    background: #f8f9fa;
+}
+
+.facebook-btn:hover {
+    background: #f0f2f5;
+}
+
+.social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.social-divider {
+    text-align: center;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.social-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+}
+
+.social-divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #666;
+    font-size: 13px;
 }
