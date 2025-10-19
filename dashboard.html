@@ -22,6 +22,11 @@
     <!-- Navigation -->
     <nav class="dashboard-nav">
         <div class="nav-container">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-logo">
                 <h2>Backyard Adventures</h2>
             </div>
@@ -32,9 +37,30 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <h3>Menu</h3>
+                <button class="close-btn" onclick="toggleMobileMenu()">&times;</button>
+            </div>
+            <div class="mobile-sidebar-menu">
+                <a href="#" onclick="showSection('overview')" class="mobile-menu-item">Overview</a>
+                <a href="#" onclick="showSection('available-resources')" class="mobile-menu-item">Book Now</a>
+                <a href="#" onclick="showSection('bookings')" class="mobile-menu-item">My Bookings</a>
+                <a href="#" onclick="showSection('payments')" class="mobile-menu-item">Payments</a>
+                <a href="#" onclick="showSection('profile')" class="mobile-menu-item">Profile</a>
+                <div id="mobile-admin-menu" style="display: none;">
+                    <hr>
+                    <a href="admin.html" class="mobile-menu-item">Admin Panel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-menu">
                 <a href="#" onclick="showSection('overview')" class="menu-item active">Overview</a>
                 <a href="#" onclick="showSection('available-resources')" class="menu-item">Book Now</a>

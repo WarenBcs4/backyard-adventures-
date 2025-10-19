@@ -101,9 +101,7 @@ async function loadClientData() {
         const tours = toursResponse.tours || toursResponse || [];
         const rentals = rentalsResponse.rentals || rentalsResponse || [];
         
-        // Display available resources for booking
-        await displayAvailableTours(tours);
-        await displayAvailableRentals(rentals);
+        // Load available resources is handled by client-booking.js
         
         // Update client stats
         updateClientStats(bookings, []);
@@ -572,91 +570,9 @@ function openRentalBooking() {
     alert('Rental booking functionality would be implemented here.');
 }
 
-async function displayAvailableTours(tours) {
-    const container = document.getElementById('tours-grid');
-    container.innerHTML = '';
-    
-    if (!tours || tours.length === 0) {
-        container.innerHTML = '<p>No tours available at the moment.</p>';
-        return;
-    }
-    
-    for (const tour of tours) {
-        const tourDiv = document.createElement('div');
-        tourDiv.className = 'item-card';
-        
-        const fields = tour.fields || tour;
-        
-        // Fetch tour images using the same method as admin
-        let imageHtml = '';
-        try {
-            const response = await api.getImages('tour', tour.id);
-            if (response.images && response.images.length > 0) {
-                imageHtml = `<img src="${response.images[0]}" alt="${fields['Tour Name'] || 'Tour'}">`;
-            }
-        } catch (error) {
-            console.log('No images found for tour:', tour.id);
-        }
-        
-        tourDiv.innerHTML = `
-            ${imageHtml}
-            <h3>${fields['Tour Name'] || fields.name || 'Tour'}</h3>
-            <p>${fields.Description || fields.description || 'No description available'}</p>
-            <p><strong>Duration:</strong> ${fields.Duration || fields.duration || 'N/A'} hours</p>
-            <p><strong>Price:</strong> $${fields.Price || fields.price || '0'}</p>
-            <p><strong>Capacity:</strong> ${fields['Max Capacity'] || fields['Maximum Capacity'] || fields.capacity || fields.maxCapacity || 'N/A'} people</p>
-            <p><strong>Type:</strong> ${fields['Tour Type'] || fields['Type'] || fields.type || fields.tourType || 'General'}</p>
-            <div class="action-buttons">
-                <button class="btn-book" onclick="bookTour('${tour.id}')">Book Tour</button>
-            </div>
-        `;
-        
-        container.appendChild(tourDiv);
-    }
-}
 
-async function displayAvailableRentals(rentals) {
-    const container = document.getElementById('rentals-grid');
-    container.innerHTML = '';
-    
-    if (!rentals || rentals.length === 0) {
-        container.innerHTML = '<p>No rentals available at the moment.</p>';
-        return;
-    }
-    
-    for (const rental of rentals) {
-        const rentalDiv = document.createElement('div');
-        rentalDiv.className = 'item-card';
-        
-        const fields = rental.fields || rental;
-        
-        // Fetch rental images using the same method as admin
-        let imageHtml = '';
-        try {
-            const response = await api.getImages('rental', rental.id);
-            if (response.images && response.images.length > 0) {
-                imageHtml = `<img src="${response.images[0]}" alt="${fields['Equipment Name'] || 'Equipment'}">`;
-            }
-        } catch (error) {
-            console.log('No images found for rental:', rental.id);
-        }
-        
-        rentalDiv.innerHTML = `
-            ${imageHtml}
-            <h3>${fields['Equipment Name'] || fields.name || 'Equipment'}</h3>
-            <p>${fields.Description || fields.description || 'No description available'}</p>
-            <p><strong>Category:</strong> ${fields.Category || fields.category || 'General'}</p>
-            <p><strong>Hourly Rate:</strong> $${fields['Hourly Rate'] || fields.hourlyRate || '0'}</p>
-            <p><strong>Daily Rate:</strong> $${fields['Daily Rate'] || fields.dailyRate || '0'}</p>
-            <p><strong>Available:</strong> ${fields['Quantity Available'] || fields.quantity || 'N/A'}</p>
-            <div class="action-buttons">
-                <button class="btn-book" onclick="bookRental('${rental.id}')">Book Rental</button>
-            </div>
-        `;
-        
-        container.appendChild(rentalDiv);
-    }
-}
+
+
 
 function bookTour(tourId) {
     alert(`Booking tour ${tourId} - functionality to be implemented`);
@@ -665,3 +581,17 @@ function bookTour(tourId) {
 function bookRental(rentalId) {
     alert(`Booking rental ${rentalId} - functionality to be implemented`);
 }
+
+// Mobile menu toggle
+function toggleMobileMenu() {
+    const overlay = document.getElementById('mobile-menu-overlay');
+    overlay.classList.toggle('active');
+}
+
+// Close mobile menu when clicking menu items
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('mobile-menu-item')) {
+        const overlay = document.getElementById('mobile-menu-overlay');
+        overlay.classList.remove('active');
+    }
+});

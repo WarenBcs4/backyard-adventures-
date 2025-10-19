@@ -269,6 +269,18 @@ body {
     aspect-ratio: 1;
     border-radius: 12px;
     overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .placeholder-img {
@@ -347,21 +359,33 @@ body {
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 40px;
+    align-items: start;
 }
 
-.contact-info h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 20px;
+.contact-left {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.contact-info {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 12px;
 }
 
 .contact-info p {
     font-size: 1.1rem;
-    color: #666;
-    margin-bottom: 10px;
+    color: #333;
+    margin-bottom: 15px;
     line-height: 1.6;
+}
+
+.contact-map {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 #contact-form {
@@ -537,6 +561,257 @@ body {
     gap: 15px;
 }
 
+/* Payment Styles */
+.booking-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.booking-summary h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.booking-summary p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.payment-methods {
+    margin-top: 20px;
+}
+
+.payment-methods h4 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+#paypal-button-container {
+    margin-bottom: 20px;
+}
+
+.payment-divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.payment-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.payment-divider span {
+    background: white;
+    padding: 0 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.card-payment {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.card-payment h5 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+#card-number,
+#card-expiry,
+#card-cvc {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+}
+
+.payment-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.btn-pay {
+    width: 100%;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-pay:hover {
+    background: #218838;
+}
+
+.success-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.success-details {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.success-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Dashboard Tours and Rentals 4-Column Grid */
+.resources-grid,
+#tours-grid,
+#rentals-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1rem !important;
+    margin-top: 1rem !important;
+}
+
+.resource-card {
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08) !important;
+    overflow: hidden !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    height: fit-content !important;
+}
+
+.resource-card:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+
+.resource-card img {
+    width: 100% !important;
+    height: 120px !important;
+    object-fit: cover !important;
+}
+
+.resource-card .image-placeholder {
+    width: 100% !important;
+    height: 120px !important;
+    background: #f0f0f0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #666 !important;
+    font-size: 24px !important;
+}
+
+.resource-card h4 {
+    font-size: 14px !important;
+    margin: 0.75rem 0.75rem 0.5rem 0.75rem !important;
+    color: #ff6b35 !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+}
+
+.resource-card p {
+    margin: 0.25rem 0.75rem !important;
+    font-size: 12px !important;
+    color: #6c757d !important;
+    line-height: 1.3 !important;
+}
+
+.resource-details {
+    margin: 0.5rem 0.75rem !important;
+}
+
+.resource-details p {
+    margin: 0.25rem 0 !important;
+    font-size: 11px !important;
+}
+
+.resource-card .btn-book {
+    width: calc(100% - 1.5rem) !important;
+    margin: 0.75rem !important;
+    background: #90EE90 !important;
+    color: #2c3e50 !important;
+    border: none !important;
+    padding: 0.5rem !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    transition: background 0.2s ease !important;
+}
+
+.resource-card .btn-book:hover {
+    background: #7FDD7F !important;
+}
+
+@media (max-width: 1200px) {
+    .resources-grid,
+    #tours-grid,
+    #rentals-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .resources-grid,
+    #tours-grid,
+    #rentals-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .resources-grid,
+    #tours-grid,
+    #rentals-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .resource-card img,
+    .resource-card .image-placeholder {
+        height: 100px !important;
+    }
+    
+    .resource-card h4 {
+        font-size: 13px !important;
+    }
+    
+    .resource-card p {
+        font-size: 11px !important;
+    }
+    
+    .resource-card .btn-book {
+        font-size: 11px !important;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-menu {
@@ -554,7 +829,11 @@ body {
     
     .contact-content {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
+    }
+    
+    .contact-map iframe {
+        height: 300px;
     }
     
     #newsletter-form {

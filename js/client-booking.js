@@ -33,11 +33,11 @@ async function displayToursTable(tours) {
         tourCard.className = 'resource-card';
         
         // Try to load actual images
-        let imageHtml = '<div class="image-placeholder" style="width:100%;height:200px;background:#f0f0f0;margin-bottom:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#666;">📸 Image</div>';
+        let imageHtml = '<div class="image-placeholder">📸 Image</div>';
         try {
             const response = await api.getImages('tour', tour.id);
             if (response.images && response.images.length > 0) {
-                imageHtml = `<img src="${response.images[0]}" alt="${tour.name}" style="width:100%;height:200px;object-fit:cover;margin-bottom:15px;border-radius:8px;">`;
+                imageHtml = `<img src="${response.images[0]}" alt="${tour.name}">`;
             }
         } catch (error) {
             console.log('No images for tour:', tour.name);
@@ -85,11 +85,11 @@ async function displayRentalsTable(rentals) {
         const quantity = rental.quantityAvailable || 0;
         
         // Try to load actual images
-        let rentalImageHtml = '<div class="image-placeholder" style="width:100%;height:200px;background:#f0f0f0;margin-bottom:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#666;">📸 Image</div>';
+        let rentalImageHtml = '<div class="image-placeholder">📸 Image</div>';
         try {
             const response = await api.getImages('rental', rental.id);
             if (response.images && response.images.length > 0) {
-                rentalImageHtml = `<img src="${response.images[0]}" alt="${equipmentName}" style="width:100%;height:200px;object-fit:cover;margin-bottom:15px;border-radius:8px;">`;
+                rentalImageHtml = `<img src="${response.images[0]}" alt="${equipmentName}">`;
             }
         } catch (error) {
             console.log('No images for rental:', equipmentName);

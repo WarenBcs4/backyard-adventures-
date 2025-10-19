@@ -92,16 +92,16 @@
             </div>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <div class="placeholder-img">Scenic Tours</div>
+                    <img src="images/pexels-ketut-subiyanto-5050196.jpg" alt="Water Sports Adventure">
                 </div>
                 <div class="gallery-item">
-                    <div class="placeholder-img">Water Sports</div>
+                    <img src="images/pexels-lasfotosdepipe-20585059.jpg" alt="Scenic Tours">
                 </div>
                 <div class="gallery-item">
-                    <div class="placeholder-img">Happy Customers</div>
+                    <img src="images/pexels-maxmillian-fredrick-2151199493-34271300.jpg" alt="Happy Customers">
                 </div>
                 <div class="gallery-item">
-                    <div class="placeholder-img">Equipment Rental</div>
+                    <img src="images/pexels-mitura1952photo-13019654.jpg" alt="Equipment Rental">
                 </div>
             </div>
         </div>
@@ -125,17 +125,30 @@
         <div class="container">
             <h2>Contact Us</h2>
             <div class="contact-content">
-                <div class="contact-info">
-                    <p>Phone: (555) 123-4567</p>
-                    <p>Email: info@backyardadventures.com</p>
-                    <p>Address: 123 Marina Drive, Waterfront City</p>
+                <div class="contact-left">
+                    <div class="contact-info">
+                        <p><strong>Phone:</strong> (555) 123-4567</p>
+                        <p><strong>Email:</strong> info@backyardadventures.com</p>
+                        <p><strong>Address:</strong> 123 Marina Drive, Waterfront City</p>
+                    </div>
+                    <form id="contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
                 </div>
-                <form id="contact-form">
-                    <input type="text" placeholder="Your Name" required>
-                    <input type="email" placeholder="Your Email" required>
-                    <textarea placeholder="Your Message" required></textarea>
-                    <button type="submit">Send Message</button>
-                </form>
+                <div class="contact-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.123456789!2d-74.0059413!3d40.7127753!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjAiTiA3NMKwMDAnMjEuNCJX!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" 
+                        width="100%" 
+                        height="400" 
+                        style="border:0;border-radius:12px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </div>
     </section>
@@ -175,9 +188,14 @@
         </div>
     </div>
 
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+    <!-- Stripe SDK -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/paypal.js"></script>
+    <script src="js/payment.js"></script>
 </body>
 </html>
