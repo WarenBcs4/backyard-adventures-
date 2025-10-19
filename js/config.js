@@ -1,8 +1,9 @@
 // API Configuration
+const API_BASE_URL = 'https://backyard-adventures-backend.vercel.app/api';
+
 const CONFIG = {
-    API_BASE_URL: 'https://backyard-adventures-backend.vercel.app/api',
+    API_BASE_URL: API_BASE_URL,
     PAYPAL: {
-        CLIENT_ID: 'Ad8U43h3NPoniQwgp8rQZdgpHUFuyzuvBXIDN6odr4oLG4wCn2Fo-OsoqKK76ua0iz6xnO-4lKLmRVXk',
         ENVIRONMENT: 'sandbox'
     }
 };

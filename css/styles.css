@@ -468,15 +468,21 @@ body {
 
 .modal-content {
     background-color: #fff;
-    margin: 2% auto;
+    margin: 5% auto;
     padding: 30px;
     border: 1px solid #e0e0e0;
     width: 90%;
     max-width: 500px;
     border-radius: 12px;
     position: relative;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: auto;
+    transform: translateY(10vh);
+}
+
+.payment-modal .modal-content {
+    max-width: 600px;
+    transform: translateY(5vh);
 }
 
 .close {
@@ -679,6 +685,113 @@ body {
     border-radius: 8px;
     margin: 20px 0;
     text-align: left;
+}
+
+.pay-later-option {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.pay-later-option h5 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.pay-later-option p {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+#payment-preference {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-family: inherit;
+}
+
+#payment-notes {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.btn-pay-later {
+    width: 100%;
+    background: #FFC107;
+    color: #333;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-pay-later:hover {
+    background: #FFB300;
+}
+
+.pay-later-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.pay-later-info h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.payment-option-section {
+    margin-bottom: 25px;
+}
+
+.payment-option-header {
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.payment-option-header h5 {
+    margin: 8px 0 5px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.payment-option-header p {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.card-icons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pay-later-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+#paypal-button-container {
+    min-height: 45px;
 }
 
 .success-actions {

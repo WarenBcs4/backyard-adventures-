@@ -301,22 +301,33 @@ async function processBookingSubmission(e) {
     
     let duration = 2; // Default 2 hours for tours
     if (type === 'rental') {
-        duration = parseInt(document.getElementById('rental-duration').value);
+        const durationElement = document.getElementById('rental-duration');
+        duration = durationElement ? parseInt(durationElement.value) : 1;
     }
     
     startDate.setHours(startDate.getHours() + duration);
     const endTime = startDate.toTimeString().slice(0, 5);
     
+    const bookingDateEl = document.getElementById('booking-date');
+    const bookingTimeEl = document.getElementById('booking-time');
+    const bookingPeopleEl = document.getElementById('booking-people');
+    const bookingNotesEl = document.getElementById('booking-notes');
+    
+    if (!bookingDateEl || !bookingTimeEl || !bookingPeopleEl) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
     const bookingData = {
-        userId: currentUser.id,
-        type: type,
-        resourceId: resourceId,
-        date: document.getElementById('booking-date').value,
-        startTime: document.getElementById('booking-time').value,
+        bookingType: type === 'tour' ? 'Tour' : 'Rental',
+        tourId: type === 'tour' ? resourceId : undefined,
+        rentalId: type === 'rental' ? resourceId : undefined,
+        bookingDate: bookingDateEl.value,
+        startTime: bookingTimeEl.value,
         endTime: endTime,
-        people: parseInt(document.getElementById('booking-people').value),
-        amount: totalAmount,
-        notes: document.getElementById('booking-notes').value
+        numberOfPeople: parseInt(bookingPeopleEl.value),
+        totalAmount: totalAmount,
+        notes: bookingNotesEl ? bookingNotesEl.value : ''
     };
     
     try {
@@ -325,8 +336,16 @@ async function processBookingSubmission(e) {
         
         alert('Booking created successfully!');
         
-        // Show payment options
-        showPaymentOptions(result.booking);
+        // Show payment options with booking data
+        const bookingForPayment = {
+            id: result.booking.id,
+            bookingDate: bookingDateEl.value,
+            startTime: bookingTimeEl.value,
+            endTime: endTime,
+            numberOfPeople: parseInt(bookingPeopleEl.value),
+            totalAmount: totalAmount
+        };
+        showPaymentOptions(bookingForPayment);
         
         // Refresh bookings list
         loadUserBookings();
@@ -348,18 +367,18 @@ function showPaymentOptions(booking) {
             
             <div class="booking-summary">
                 <h4>Booking Summary</h4>
-                <p><strong>Date:</strong> ${booking.fields['Booking Date']}</p>
-                <p><strong>Time:</strong> ${booking.fields['Start Time']} - ${booking.fields['End Time']}</p>
-                <p><strong>People:</strong> ${booking.fields['Number of People']}</p>
-                <p><strong>Total:</strong> $${booking.fields['Total Amount']}</p>
+                <p><strong>Date:</strong> ${booking.bookingDate}</p>
+                <p><strong>Time:</strong> ${booking.startTime} - ${booking.endTime}</p>
+                <p><strong>People:</strong> ${booking.numberOfPeople}</p>
+                <p><strong>Total:</strong> $${booking.totalAmount}</p>
             </div>
             
             <div class="payment-options">
-                <button onclick="processPaymentNow('${booking.id}', ${booking.fields['Total Amount']}, 'PayPal')" class="btn-payment paypal">
-                    Pay with PayPal - $${booking.fields['Total Amount']}
+                <button onclick="processPaymentNow('${booking.id}', ${booking.totalAmount}, 'PayPal')" class="btn-payment paypal">
+                    Pay with PayPal - $${booking.totalAmount}
                 </button>
-                <button onclick="processPaymentNow('${booking.id}', ${booking.fields['Total Amount']}, 'Credit Card')" class="btn-payment card">
-                    Pay with Credit Card - $${booking.fields['Total Amount']}
+                <button onclick="processPaymentNow('${booking.id}', ${booking.totalAmount}, 'Credit Card')" class="btn-payment card">
+                    Pay with Credit Card - $${booking.totalAmount}
                 </button>
                 <button onclick="closePaymentModal()" class="btn-cancel">Pay Later</button>
             </div>
@@ -377,31 +396,115 @@ function closePaymentModal() {
 }
 
 async function processPaymentNow(bookingId, amount, method) {
-    try {
-        // Create payment record
-        const paymentData = {
-            bookingId: bookingId,
-            userId: currentUser.id,
-            amount: amount,
-            method: method,
-            transactionId: 'TXN' + Date.now() + Math.random().toString(36).substr(2, 9),
-            status: 'Success'
-        };
-        
-        await api.createPayment(paymentData);
-        
-        // Payment status will be updated by backend
-        
-        closePaymentModal();
-        alert('Payment successful! Your booking is confirmed.');
-        
-        // Refresh data
-        loadUserBookings();
-        loadUserPayments();
-        
-    } catch (error) {
-        alert('Payment failed. Please try again.');
-        console.error('Payment error:', error);
+    closePaymentModal();
+    
+    // Get booking data for payment modal
+    const bookingData = {
+        type: 'existing',
+        service: 'Booked Service',
+        date: new Date().toISOString().split('T')[0],
+        time: '12:00',
+        people: 1,
+        amount: amount,
+        notes: `Payment for booking ${bookingId}`
+    };
+    
+    // Show the payment modal directly
+    showPaymentModal(bookingData);
+}
+
+// Payment modal function
+function showPaymentModal(bookingData) {
+    const modal = document.createElement('div');
+    modal.className = 'modal payment-modal';
+    modal.id = 'payment-modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h3>Complete Your Payment</h3>
+            
+            <div class="booking-summary">
+                <h4>Booking Summary</h4>
+                <p><strong>Service:</strong> ${bookingData.service}</p>
+                <p><strong>Date:</strong> ${bookingData.date}</p>
+                <p><strong>Time:</strong> ${bookingData.time}</p>
+                <p><strong>People:</strong> ${bookingData.people}</p>
+                <p><strong>Total Amount:</strong> $${bookingData.amount}</p>
+            </div>
+            
+            <div class="payment-methods">
+                <h4>Choose Payment Method</h4>
+                
+                <div class="payment-option-section">
+                    <div class="payment-option-header">
+                        <svg width="100" height="25" viewBox="0 0 100 25" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4.917v15.166c0 .92-.747 1.667-1.667 1.667H1.667C.747 21.75 0 21.003 0 20.083V4.917C0 3.997.747 3.25 1.667 3.25h8.666C11.253 3.25 12 3.997 12 4.917z" fill="#003087"/>
+                            <path d="M27.917 3.25h8.666c.92 0 1.667.747 1.667 1.667v15.166c0 .92-.747 1.667-1.667 1.667h-8.666c-.92 0-1.667-.747-1.667-1.667V4.917c0-.92.747-1.667 1.667-1.667z" fill="#009cde"/>
+                            <text x="50" y="15" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#003087">PayPal</text>
+                        </svg>
+                        <p>Pay securely with your PayPal account</p>
+                    </div>
+                    <div id="paypal-button-container"></div>
+                </div>
+                
+                <div class="payment-divider">
+                    <span>OR</span>
+                </div>
+                
+                <div class="pay-later-option">
+                    <div class="payment-option-header">
+                        <div class="pay-later-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#FFC107"/>
+                            </svg>
+                        </div>
+                        <h5>Book Now, Pay Later</h5>
+                        <p>Reserve your booking and arrange payment details with our team</p>
+                    </div>
+                    <button onclick="closePaymentModal(); alert('Payment arrangement confirmed. Our team will contact you within 24 hours.')" class="btn-pay-later">Arrange Payment Later</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.style.display = 'block';
+    
+    // Initialize PayPal after modal is rendered
+    setTimeout(() => {
+        if (typeof paypal !== 'undefined') {
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: bookingData.amount.toString()
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        closePaymentModal();
+                        alert('Payment successful! Transaction ID: ' + details.id);
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    alert('Payment failed. Please try again.');
+                }
+            }).render('#paypal-button-container');
+        } else {
+            document.getElementById('paypal-button-container').innerHTML = '<p>PayPal is loading...</p>';
+        }
+    }, 100);
+}
+
+function closePaymentModal() {
+    const modal = document.getElementById('payment-modal');
+    if (modal) {
+        modal.remove();
     }
 }
 

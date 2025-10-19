@@ -1,17 +1,32 @@
 // Payment Processing System
 let stripe = null;
-let paypalButtons = null;
+let paypalClientId = null;
 
 // Initialize payment systems
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Get PayPal configuration
+    try {
+        const response = await fetch(`${API_BASE_URL}/payments/config/paypal`);
+        const config = await response.json();
+        paypalClientId = config.clientId;
+        
+        // Update PayPal SDK script
+        const paypalScript = document.querySelector('script[src*="paypal.com/sdk"]');
+        if (paypalScript && paypalClientId !== 'sb') {
+            paypalScript.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD`;
+        }
+    } catch (error) {
+        console.error('Failed to load PayPal config:', error);
+    }
+    
     // Initialize Stripe (use test key)
-    stripe = Stripe('pk_test_51234567890abcdef'); // Replace with your Stripe publishable key
+    stripe = Stripe('pk_test_51234567890abcdef');
 });
 
 // Show payment modal after booking
 function showPaymentModal(bookingData) {
     const modal = document.createElement('div');
-    modal.className = 'modal';
+    modal.className = 'modal payment-modal';
     modal.id = 'payment-modal';
     
     modal.innerHTML = `
@@ -32,7 +47,17 @@ function showPaymentModal(bookingData) {
                 <h4>Choose Payment Method</h4>
                 
                 <!-- PayPal Button -->
-                <div id="paypal-button-container"></div>
+                <div class="payment-option-section">
+                    <div class="payment-option-header">
+                        <svg width="100" height="25" viewBox="0 0 100 25" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4.917v15.166c0 .92-.747 1.667-1.667 1.667H1.667C.747 21.75 0 21.003 0 20.083V4.917C0 3.997.747 3.25 1.667 3.25h8.666C11.253 3.25 12 3.997 12 4.917z" fill="#003087"/>
+                            <path d="M27.917 3.25h8.666c.92 0 1.667.747 1.667 1.667v15.166c0 .92-.747 1.667-1.667 1.667h-8.666c-.92 0-1.667-.747-1.667-1.667V4.917c0-.92.747-1.667 1.667-1.667z" fill="#009cde"/>
+                            <text x="50" y="15" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#003087">PayPal</text>
+                        </svg>
+                        <p>Pay securely with your PayPal account</p>
+                    </div>
+                    <div id="paypal-button-container"></div>
+                </div>
                 
                 <!-- Credit Card Form -->
                 <div class="payment-divider">
@@ -40,7 +65,21 @@ function showPaymentModal(bookingData) {
                 </div>
                 
                 <div class="card-payment">
-                    <h5>Pay with Credit Card</h5>
+                    <div class="payment-option-header">
+                        <div class="card-icons">
+                            <svg width="30" height="20" viewBox="0 0 30 20" fill="none">
+                                <rect width="30" height="20" rx="3" fill="#1434CB"/>
+                                <text x="15" y="13" text-anchor="middle" fill="white" font-size="8" font-weight="bold">VISA</text>
+                            </svg>
+                            <svg width="30" height="20" viewBox="0 0 30 20" fill="none">
+                                <rect width="30" height="20" rx="3" fill="#EB001B"/>
+                                <circle cx="10" cy="10" r="6" fill="#FF5F00"/>
+                                <circle cx="20" cy="10" r="6" fill="#F79E1B"/>
+                            </svg>
+                        </div>
+                        <h5>Pay with Credit Card</h5>
+                        <p>Secure payment with SSL encryption</p>
+                    </div>
                     <form id="card-form">
                         <div class="form-group">
                             <label>Card Number</label>
@@ -59,6 +98,34 @@ function showPaymentModal(bookingData) {
                         <button type="submit" class="btn-pay">Pay $${bookingData.amount}</button>
                     </form>
                 </div>
+                
+                <!-- Pay Later Option -->
+                <div class="payment-divider">
+                    <span>OR</span>
+                </div>
+                
+                <div class="pay-later-option">
+                    <div class="payment-option-header">
+                        <div class="pay-later-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#FFC107"/>
+                            </svg>
+                        </div>
+                        <h5>Book Now, Pay Later</h5>
+                        <p>Reserve your booking and arrange payment details with our team</p>
+                    </div>
+                    <form id="pay-later-form">
+                        <select id="payment-preference" required>
+                            <option value="">Select preferred payment method</option>
+                            <option value="cash">Cash on arrival</option>
+                            <option value="bank-transfer">Bank transfer</option>
+                            <option value="check">Check payment</option>
+                            <option value="call-to-arrange">Call to arrange payment</option>
+                        </select>
+                        <textarea id="payment-notes" placeholder="Additional payment instructions or special arrangements" rows="3"></textarea>
+                        <button type="submit" class="btn-pay-later">Book Now - Pay Later</button>
+                    </form>
+                </div>
             </div>
         </div>
     `;
@@ -69,6 +136,7 @@ function showPaymentModal(bookingData) {
     // Initialize payment methods
     initializePayPal(bookingData);
     initializeStripe(bookingData);
+    initializePayLater(bookingData);
 }
 
 // Initialize PayPal
@@ -85,15 +153,42 @@ function initializePayPal(bookingData) {
                     }]
                 });
             },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    processPaymentSuccess({
-                        method: 'PayPal',
-                        transactionId: details.id,
-                        amount: bookingData.amount,
-                        bookingData: bookingData
+            onApprove: async function(data, actions) {
+                try {
+                    const details = await actions.order.capture();
+                    
+                    // Process payment through backend
+                    const response = await fetch(`${API_BASE_URL}/payments/paypal/process`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({
+                            orderId: details.id,
+                            payerId: details.payer.payer_id,
+                            amount: bookingData.amount,
+                            bookingData: bookingData
+                        })
                     });
-                });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        closePaymentModal();
+                        showSuccessModal({
+                            method: 'PayPal',
+                            transactionId: details.id,
+                            amount: bookingData.amount
+                        });
+                    } else {
+                        throw new Error(result.error || 'Payment processing failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('PayPal processing error:', error);
+                    alert('Payment successful but booking failed. Please contact support.');
+                }
             },
             onError: function(err) {
                 console.error('PayPal Error:', err);
@@ -137,21 +232,47 @@ function initializeStripe(bookingData) {
 // Process Stripe payment
 async function processStripePayment(token, bookingData) {
     try {
-        // In a real app, send token to your server
-        // For demo, simulate successful payment
-        setTimeout(() => {
-            processPaymentSuccess({
-                method: 'Credit Card',
-                transactionId: 'stripe_' + Date.now(),
-                amount: bookingData.amount,
-                bookingData: bookingData
-            });
-        }, 2000);
-        
-        // Show processing
         const submitBtn = document.querySelector('.btn-pay');
         submitBtn.textContent = 'Processing...';
         submitBtn.disabled = true;
+        
+        // For demo purposes, simulate successful payment
+        // In production, you would send the token to your server for processing
+        setTimeout(async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/payments/stripe/process`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        token: token.id,
+                        amount: bookingData.amount,
+                        bookingData: bookingData
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    closePaymentModal();
+                    showSuccessModal({
+                        method: 'Credit Card',
+                        transactionId: result.payment.transactionId,
+                        amount: bookingData.amount
+                    });
+                } else {
+                    throw new Error(result.error || 'Payment processing failed');
+                }
+                
+            } catch (error) {
+                console.error('Stripe processing error:', error);
+                alert('Payment failed. Please try again.');
+                submitBtn.textContent = `Pay $${bookingData.amount}`;
+                submitBtn.disabled = false;
+            }
+        }, 2000);
         
     } catch (error) {
         console.error('Stripe payment error:', error);
@@ -159,38 +280,7 @@ async function processStripePayment(token, bookingData) {
     }
 }
 
-// Process successful payment
-async function processPaymentSuccess(paymentData) {
-    try {
-        // Create booking record
-        const bookingResponse = await api.createBooking({
-            type: paymentData.bookingData.type,
-            service: paymentData.bookingData.service,
-            date: paymentData.bookingData.date,
-            time: paymentData.bookingData.time,
-            people: paymentData.bookingData.people,
-            amount: paymentData.amount,
-            notes: paymentData.bookingData.notes || ''
-        });
-        
-        // Create payment record
-        await api.createPayment({
-            bookingId: bookingResponse.booking.id,
-            amount: paymentData.amount,
-            method: paymentData.method,
-            transactionId: paymentData.transactionId,
-            status: 'Success'
-        });
-        
-        // Show success message
-        closePaymentModal();
-        showSuccessModal(paymentData);
-        
-    } catch (error) {
-        console.error('Error processing payment:', error);
-        alert('Payment successful but booking failed. Please contact support.');
-    }
-}
+
 
 // Show success modal
 function showSuccessModal(paymentData) {
@@ -257,6 +347,98 @@ function downloadReceipt(transactionId) {
     a.download = `receipt_${transactionId}.txt`;
     a.click();
     window.URL.revokeObjectURL(url);
+}
+
+// Initialize Pay Later option
+function initializePayLater(bookingData) {
+    const payLaterForm = document.getElementById('pay-later-form');
+    if (payLaterForm) {
+        payLaterForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const paymentPreference = document.getElementById('payment-preference').value;
+            const paymentNotes = document.getElementById('payment-notes').value;
+            
+            if (!paymentPreference) {
+                alert('Please select a payment preference');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/payments/pay-later/process`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        bookingData: bookingData,
+                        paymentPreference: paymentPreference,
+                        paymentNotes: paymentNotes
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    closePaymentModal();
+                    showPayLaterSuccessModal({
+                        bookingId: result.booking.id,
+                        paymentPreference: paymentPreference,
+                        amount: bookingData.amount
+                    });
+                } else {
+                    throw new Error(result.error || 'Booking failed');
+                }
+                
+            } catch (error) {
+                console.error('Pay later booking error:', error);
+                alert('Booking failed. Please try again.');
+            }
+        });
+    }
+}
+
+// Show pay later success modal
+function showPayLaterSuccessModal(data) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'pay-later-success-modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="success-content">
+                <div class="success-icon">📅</div>
+                <h3>Booking Confirmed!</h3>
+                <p>Your booking has been reserved. Payment will be arranged as requested.</p>
+                <div class="success-details">
+                    <p><strong>Booking ID:</strong> ${data.bookingId}</p>
+                    <p><strong>Amount:</strong> $${data.amount}</p>
+                    <p><strong>Payment Method:</strong> ${data.paymentPreference}</p>
+                    <p><strong>Status:</strong> Payment Pending</p>
+                </div>
+                <div class="pay-later-info">
+                    <h4>Next Steps:</h4>
+                    <p>Our team will contact you within 24 hours to confirm payment arrangements. You can also reach us at:</p>
+                    <p><strong>Phone:</strong> (555) 123-4567</p>
+                    <p><strong>Email:</strong> info@backyardadventures.com</p>
+                </div>
+                <div class="success-actions">
+                    <button onclick="closePayLaterSuccessModal()" class="btn-primary">Continue</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.style.display = 'block';
+}
+
+function closePayLaterSuccessModal() {
+    const modal = document.getElementById('pay-later-success-modal');
+    if (modal) {
+        modal.remove();
+    }
 }
 
 // Update booking form to trigger payment
