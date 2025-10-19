@@ -1,39 +1,32 @@
 // Charts and Analytics functionality using Chart.js
-let revenueChart, bookingTypesChart, clientFlowChart, engagementChart;
+let bookingTypesChart, paymentStatusChart, tourCategoriesChart, monthlyRevenueChart;
 
-function loadCharts(bookings, payments) {
-    // Only load charts if we're on the analytics section and user is admin
-    if (!auth.isAdmin()) return;
-    
-    loadRevenueChart(payments);
-    loadBookingTypesChart(bookings);
-    loadClientFlowChart(bookings);
-    loadEngagementChart(bookings, payments);
+function initCharts(data) {
+    loadBookingTypesChart(data.bookings || []);
+    loadPaymentStatusChart(data.payments || []);
+    loadTourCategoriesChart(data.tours || []);
+    loadMonthlyRevenueChart(data.payments || []);
 }
 
-function loadRevenueChart(payments) {
-    const ctx = document.getElementById('revenue-chart');
+function loadMonthlyRevenueChart(payments) {
+    const ctx = document.getElementById('monthly-revenue-chart');
     if (!ctx) return;
     
-    // Process payment data for monthly revenue
     const monthlyRevenue = processMonthlyRevenue(payments);
     
-    if (revenueChart) {
-        revenueChart.destroy();
+    if (monthlyRevenueChart) {
+        monthlyRevenueChart.destroy();
     }
     
-    revenueChart = new Chart(ctx, {
-        type: 'line',
+    monthlyRevenueChart = new Chart(ctx, {
+        type: 'pie',
         data: {
             labels: monthlyRevenue.labels,
             datasets: [{
-                label: 'Monthly Revenue',
                 data: monthlyRevenue.data,
-                borderColor: 'black',
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundColor: ['#ff6b35', '#90EE90', '#87CEEB', '#DDA0DD', '#F0E68C', '#FFB6C1'],
                 borderWidth: 2,
-                fill: true,
-                tension: 0.4
+                borderColor: 'white'
             }]
         },
         options: {
@@ -41,17 +34,8 @@ function loadRevenueChart(payments) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
-                        }
-                    }
+                    position: 'bottom',
+                    labels: { font: { size: 11 } }
                 }
             }
         }
@@ -62,7 +46,6 @@ function loadBookingTypesChart(bookings) {
     const ctx = document.getElementById('booking-types-chart');
     if (!ctx) return;
     
-    // Process booking types data
     const bookingTypes = processBookingTypes(bookings);
     
     if (bookingTypesChart) {
@@ -75,12 +58,7 @@ function loadBookingTypesChart(bookings) {
             labels: bookingTypes.labels,
             datasets: [{
                 data: bookingTypes.data,
-                backgroundColor: [
-                    '#333333',
-                    '#666666',
-                    '#999999',
-                    '#cccccc'
-                ],
+                backgroundColor: ['#ff6b35', '#90EE90', '#87CEEB', '#DDA0DD'],
                 borderWidth: 2,
                 borderColor: 'white'
             }]
@@ -90,79 +68,31 @@ function loadBookingTypesChart(bookings) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    position: 'bottom',
+                    labels: { font: { size: 11 } }
                 }
             }
         }
     });
 }
 
-function loadClientFlowChart(bookings) {
-    const ctx = document.getElementById('client-flow-chart');
+function loadPaymentStatusChart(payments) {
+    const ctx = document.getElementById('payment-status-chart');
     if (!ctx) return;
     
-    // Process daily client flow data
-    const clientFlow = processDailyClientFlow(bookings);
+    const paymentStatus = processPaymentStatus(payments);
     
-    if (clientFlowChart) {
-        clientFlowChart.destroy();
+    if (paymentStatusChart) {
+        paymentStatusChart.destroy();
     }
     
-    clientFlowChart = new Chart(ctx, {
-        type: 'bar',
+    paymentStatusChart = new Chart(ctx, {
+        type: 'pie',
         data: {
-            labels: clientFlow.labels,
+            labels: paymentStatus.labels,
             datasets: [{
-                label: 'Daily Bookings',
-                data: clientFlow.data,
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderColor: 'black',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                }
-            }
-        }
-    });
-}
-
-function loadEngagementChart(bookings, payments) {
-    const ctx = document.getElementById('engagement-chart');
-    if (!ctx) return;
-    
-    // Process customer engagement data
-    const engagement = processCustomerEngagement(bookings, payments);
-    
-    if (engagementChart) {
-        engagementChart.destroy();
-    }
-    
-    engagementChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: engagement.labels,
-            datasets: [{
-                data: engagement.data,
-                backgroundColor: [
-                    '#000000',
-                    '#333333',
-                    '#666666',
-                    '#999999'
-                ],
+                data: paymentStatus.data,
+                backgroundColor: ['#90EE90', '#ff6b35', '#87CEEB'],
                 borderWidth: 2,
                 borderColor: 'white'
             }]
@@ -172,36 +102,70 @@ function loadEngagementChart(bookings, payments) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    position: 'bottom',
+                    labels: { font: { size: 11 } }
                 }
             }
         }
     });
 }
+
+function loadTourCategoriesChart(tours) {
+    const ctx = document.getElementById('tour-categories-chart');
+    if (!ctx) return;
+    
+    const tourCategories = processTourCategories(tours);
+    
+    if (tourCategoriesChart) {
+        tourCategoriesChart.destroy();
+    }
+    
+    tourCategoriesChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: tourCategories.labels,
+            datasets: [{
+                data: tourCategories.data,
+                backgroundColor: ['#ff6b35', '#90EE90', '#87CEEB', '#DDA0DD', '#F0E68C'],
+                borderWidth: 2,
+                borderColor: 'white'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { size: 11 } }
+                }
+            }
+        }
+    });
+}
+
+
 
 // Data processing functions
 function processMonthlyRevenue(payments) {
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
     const currentDate = new Date();
     const labels = [];
     const data = [];
     
-    // Get last 6 months
     for (let i = 5; i >= 0; i--) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
-        labels.push(monthNames[date.getMonth()]);
+        labels.push(monthNames[date.getMonth()] || monthNames[i]);
         
-        // Calculate revenue for this month
         const monthRevenue = payments
             .filter(payment => {
-                if (!payment.fields['Payment Date'] || payment.fields.Status !== 'Success') return false;
-                const paymentDate = new Date(payment.fields['Payment Date']);
-                return paymentDate.getMonth() === date.getMonth() && 
-                       paymentDate.getFullYear() === date.getFullYear();
+                const paymentDate = payment.paymentDate || payment.fields?.['Payment Date'];
+                const status = payment.status || payment.fields?.Status;
+                if (!paymentDate || status !== 'Success') return false;
+                const pDate = new Date(paymentDate);
+                return pDate.getMonth() === date.getMonth() && pDate.getFullYear() === date.getFullYear();
             })
-            .reduce((sum, payment) => sum + (payment.fields.Amount || 0), 0);
+            .reduce((sum, payment) => sum + (payment.amount || payment.fields?.Amount || 0), 0);
         
         data.push(monthRevenue);
     }
@@ -213,7 +177,7 @@ function processBookingTypes(bookings) {
     const types = {};
     
     bookings.forEach(booking => {
-        const type = booking.fields['Booking Type'] || 'Unknown';
+        const type = booking.bookingType || booking.fields?.['Booking Type'] || 'Unknown';
         types[type] = (types[type] || 0) + 1;
     });
     
@@ -223,57 +187,35 @@ function processBookingTypes(bookings) {
     };
 }
 
-function processDailyClientFlow(bookings) {
-    const labels = [];
-    const data = [];
+function processPaymentStatus(payments) {
+    const status = {};
     
-    // Get last 7 days
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const dateString = date.toISOString().split('T')[0];
-        
-        labels.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
-        
-        // Count bookings for this day
-        const dayBookings = bookings.filter(booking => 
-            booking.fields['Booking Date'] === dateString
-        ).length;
-        
-        data.push(dayBookings);
-    }
-    
-    return { labels, data };
-}
-
-function processCustomerEngagement(bookings, payments) {
-    const totalBookings = bookings.length;
-    const completedBookings = bookings.filter(b => b.fields['Booking Status'] === 'Completed').length;
-    const cancelledBookings = bookings.filter(b => b.fields['Booking Status'] === 'Cancelled').length;
-    const upcomingBookings = bookings.filter(b => {
-        const bookingDate = new Date(b.fields['Booking Date']);
-        return bookingDate >= new Date() && b.fields['Booking Status'] === 'Confirmed';
-    }).length;
+    payments.forEach(payment => {
+        const paymentStatus = payment.status || payment.fields?.Status || 'Unknown';
+        status[paymentStatus] = (status[paymentStatus] || 0) + 1;
+    });
     
     return {
-        labels: ['Completed', 'Upcoming', 'Cancelled', 'Other'],
-        data: [
-            completedBookings,
-            upcomingBookings,
-            cancelledBookings,
-            totalBookings - completedBookings - upcomingBookings - cancelledBookings
-        ]
+        labels: Object.keys(status),
+        data: Object.values(status)
     };
 }
 
-// Utility function to update charts when data changes
-function updateCharts() {
-    if (auth.isAdmin()) {
-        // Reload data and update charts
-        loadDashboardData();
-    }
+function processTourCategories(tours) {
+    const categories = {};
+    
+    tours.forEach(tour => {
+        const category = tour.tourType || tour.fields?.['Tour Type'] || 'General';
+        categories[category] = (categories[category] || 0) + 1;
+    });
+    
+    return {
+        labels: Object.keys(categories),
+        data: Object.values(categories)
+    };
 }
 
+
+
 // Export functions for use in other modules
-window.loadCharts = loadCharts;
-window.updateCharts = updateCharts;
+window.initCharts = initCharts;

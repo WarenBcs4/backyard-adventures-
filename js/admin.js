@@ -19,13 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('admin-name').textContent = `Welcome, ${currentUser.name}`;
     
     // Load initial data
-    loadAnalytics();
     loadTours();
     loadRentals();
     loadBookings();
     loadNewsletter();
     loadStaff();
     loadAdminProfile();
+    
+    // Load analytics after a short delay to ensure DOM is ready
+    setTimeout(() => {
+        loadAnalytics();
+    }, 500);
     
     // Setup form handlers
     setupFormHandlers();
@@ -434,12 +438,27 @@ function displayBookings(bookings) {
 // Analytics
 async function loadAnalytics() {
     try {
-        const response = await api.getAnalytics();
+        const [bookingsResponse, toursResponse, rentalsResponse] = await Promise.all([
+            api.getBookings(),
+            api.getTours(),
+            api.getRentals()
+        ]);
+        
+        const data = {
+            bookings: bookingsResponse.bookings || [],
+            tours: toursResponse.tours || [],
+            payments: [] // Add payments when available
+        };
+        
         if (typeof initCharts === 'function') {
-            initCharts(response.data);
+            initCharts(data);
         }
     } catch (error) {
         console.error('Error loading analytics:', error);
+        // Initialize with empty data if API fails
+        if (typeof initCharts === 'function') {
+            initCharts({ bookings: [], tours: [], payments: [] });
+        }
     }
 }
 

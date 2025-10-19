@@ -16,27 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDashboard();
     loadDashboardData();
     
-    // Mobile menu functionality
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const overlay = document.getElementById('mobile-overlay');
-    
-    if (menuBtn) {
-        menuBtn.addEventListener('click', toggleMobileMenu);
-    }
-    if (overlay) {
-        overlay.addEventListener('click', toggleMobileMenu);
-    }
+
 });
 
-function toggleMobileMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('mobile-overlay');
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    
-    if (sidebar) sidebar.classList.toggle('active');
-    if (overlay) overlay.classList.toggle('active');
-    if (menuBtn) menuBtn.classList.toggle('active');
-}
+
 
 function initializeDashboard() {
     // Set user name
@@ -109,7 +92,18 @@ async function loadClientData() {
         const bookings = response.bookings || [];
         displayClientBookings(bookings);
         
-        // Available resources are loaded in the Book Now section
+        // Load available tours and rentals
+        const [toursResponse, rentalsResponse] = await Promise.all([
+            api.getTours(),
+            api.getRentals()
+        ]);
+        
+        const tours = toursResponse.tours || toursResponse || [];
+        const rentals = rentalsResponse.rentals || rentalsResponse || [];
+        
+        // Display available resources for booking
+        await displayAvailableTours(tours);
+        await displayAvailableRentals(rentals);
         
         // Update client stats
         updateClientStats(bookings, []);
@@ -187,11 +181,17 @@ function updateAdminStats(bookings, payments, messages, subscribers) {
         m.fields.Status === 'New' || m.fields.Status === 'In Progress'
     ).length;
     
-    document.getElementById('today-bookings').textContent = todayBookings;
-    document.getElementById('monthly-revenue').textContent = `$${monthlyRevenue.toFixed(2)}`;
-    document.getElementById('active-clients').textContent = activeClients;
-    document.getElementById('pending-messages').textContent = pendingMessages;
-    document.getElementById('total-subscribers').textContent = subscribers.length;
+    const todayBookingsEl = document.getElementById('today-bookings');
+    const monthlyRevenueEl = document.getElementById('monthly-revenue');
+    const activeClientsEl = document.getElementById('active-clients');
+    const pendingMessagesEl = document.getElementById('pending-messages');
+    const totalSubscribersEl = document.getElementById('total-subscribers');
+    
+    if (todayBookingsEl) todayBookingsEl.textContent = todayBookings;
+    if (monthlyRevenueEl) monthlyRevenueEl.textContent = `$${monthlyRevenue.toFixed(2)}`;
+    if (activeClientsEl) activeClientsEl.textContent = activeClients;
+    if (pendingMessagesEl) pendingMessagesEl.textContent = pendingMessages;
+    if (totalSubscribersEl) totalSubscribersEl.textContent = subscribers.length;
 }
 
 function displayClientBookings(bookings) {
@@ -259,6 +259,7 @@ function displayClientPayments(payments) {
 
 function displayAdminBookings(bookings) {
     const container = document.getElementById('admin-bookings-list');
+    if (!container) return;
     container.innerHTML = '';
     
     bookings.forEach(booking => {
@@ -285,6 +286,7 @@ function displayAdminBookings(bookings) {
 
 function displayTours(tours) {
     const container = document.getElementById('tours-list');
+    if (!container) return;
     container.innerHTML = '';
     
     tours.forEach(tour => {
@@ -310,6 +312,7 @@ function displayTours(tours) {
 
 function displayRentals(rentals) {
     const container = document.getElementById('rentals-list');
+    if (!container) return;
     container.innerHTML = '';
     
     rentals.forEach(rental => {
@@ -335,6 +338,7 @@ function displayRentals(rentals) {
 
 function displayMessages(messages) {
     const container = document.getElementById('messages-list');
+    if (!container) return;
     container.innerHTML = '';
     
     messages.forEach(message => {
@@ -360,6 +364,7 @@ function displayMessages(messages) {
 
 function displayNewsletterSubscribers(subscribers) {
     const container = document.getElementById('subscribers-list');
+    if (!container) return;
     container.innerHTML = '';
     
     subscribers.forEach(subscriber => {
@@ -560,4 +565,103 @@ async function deleteRental(rentalId) {
 function respondToMessage(messageId) {
     // Implementation for responding to messages
     alert('Message response functionality would be implemented here.');
+}
+
+function openRentalBooking() {
+    // Implementation for opening rental booking modal
+    alert('Rental booking functionality would be implemented here.');
+}
+
+async function displayAvailableTours(tours) {
+    const container = document.getElementById('tours-grid');
+    container.innerHTML = '';
+    
+    if (!tours || tours.length === 0) {
+        container.innerHTML = '<p>No tours available at the moment.</p>';
+        return;
+    }
+    
+    for (const tour of tours) {
+        const tourDiv = document.createElement('div');
+        tourDiv.className = 'item-card';
+        
+        const fields = tour.fields || tour;
+        
+        // Fetch tour images using the same method as admin
+        let imageHtml = '';
+        try {
+            const response = await api.getImages('tour', tour.id);
+            if (response.images && response.images.length > 0) {
+                imageHtml = `<img src="${response.images[0]}" alt="${fields['Tour Name'] || 'Tour'}">`;
+            }
+        } catch (error) {
+            console.log('No images found for tour:', tour.id);
+        }
+        
+        tourDiv.innerHTML = `
+            ${imageHtml}
+            <h3>${fields['Tour Name'] || fields.name || 'Tour'}</h3>
+            <p>${fields.Description || fields.description || 'No description available'}</p>
+            <p><strong>Duration:</strong> ${fields.Duration || fields.duration || 'N/A'} hours</p>
+            <p><strong>Price:</strong> $${fields.Price || fields.price || '0'}</p>
+            <p><strong>Capacity:</strong> ${fields['Max Capacity'] || fields['Maximum Capacity'] || fields.capacity || fields.maxCapacity || 'N/A'} people</p>
+            <p><strong>Type:</strong> ${fields['Tour Type'] || fields['Type'] || fields.type || fields.tourType || 'General'}</p>
+            <div class="action-buttons">
+                <button class="btn-book" onclick="bookTour('${tour.id}')">Book Tour</button>
+            </div>
+        `;
+        
+        container.appendChild(tourDiv);
+    }
+}
+
+async function displayAvailableRentals(rentals) {
+    const container = document.getElementById('rentals-grid');
+    container.innerHTML = '';
+    
+    if (!rentals || rentals.length === 0) {
+        container.innerHTML = '<p>No rentals available at the moment.</p>';
+        return;
+    }
+    
+    for (const rental of rentals) {
+        const rentalDiv = document.createElement('div');
+        rentalDiv.className = 'item-card';
+        
+        const fields = rental.fields || rental;
+        
+        // Fetch rental images using the same method as admin
+        let imageHtml = '';
+        try {
+            const response = await api.getImages('rental', rental.id);
+            if (response.images && response.images.length > 0) {
+                imageHtml = `<img src="${response.images[0]}" alt="${fields['Equipment Name'] || 'Equipment'}">`;
+            }
+        } catch (error) {
+            console.log('No images found for rental:', rental.id);
+        }
+        
+        rentalDiv.innerHTML = `
+            ${imageHtml}
+            <h3>${fields['Equipment Name'] || fields.name || 'Equipment'}</h3>
+            <p>${fields.Description || fields.description || 'No description available'}</p>
+            <p><strong>Category:</strong> ${fields.Category || fields.category || 'General'}</p>
+            <p><strong>Hourly Rate:</strong> $${fields['Hourly Rate'] || fields.hourlyRate || '0'}</p>
+            <p><strong>Daily Rate:</strong> $${fields['Daily Rate'] || fields.dailyRate || '0'}</p>
+            <p><strong>Available:</strong> ${fields['Quantity Available'] || fields.quantity || 'N/A'}</p>
+            <div class="action-buttons">
+                <button class="btn-book" onclick="bookRental('${rental.id}')">Book Rental</button>
+            </div>
+        `;
+        
+        container.appendChild(rentalDiv);
+    }
+}
+
+function bookTour(tourId) {
+    alert(`Booking tour ${tourId} - functionality to be implemented`);
+}
+
+function bookRental(rentalId) {
+    alert(`Booking rental ${rentalId} - functionality to be implemented`);
 }

@@ -20,45 +20,37 @@
 
 .nav-logo h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 15px;
     font-weight: 600;
 }
 
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+    margin-left: auto;
 }
 
 .nav-menu span {
-    font-size: 0.95rem;
+    font-size: 13px;
     color: #ecf0f1;
 }
 
 .logout-btn {
-    background: rgba(40, 167, 69, 0.9);
-    color: white;
+    background: #90EE90;
+    color: #2c3e50;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 13px;
     font-weight: 500;
-    font-family: 'Inter', sans-serif;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
 }
 
 .logout-btn:hover {
-    background: rgba(40, 167, 69, 1);
+    background: #7FDD7F;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-}
-
-.logout-btn:active {
-    transform: translateY(0);
-    background: rgba(40, 167, 69, 0.8);
-    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
 }
 
 .dashboard-container {
@@ -68,10 +60,10 @@
 }
 
 .sidebar {
-    width: 280px;
+    width: 240px;
     background: white;
     box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-    padding: 2rem 0;
+    padding: 1.5rem 0;
 }
 
 .sidebar-menu {
@@ -82,27 +74,28 @@
 .menu-item {
     color: #2c3e50;
     text-decoration: none;
-    padding: 1rem 2rem;
+    padding: 0.75rem 1.5rem;
     border-left: 3px solid transparent;
     transition: all 0.2s ease;
     font-weight: 500;
+    font-size: 14px;
 }
 
 .menu-item:hover {
     background: #f8f9fa;
-    border-left-color: #007bff;
-    color: #007bff;
+    border-left-color: #ff6b35;
+    color: #ff6b35;
 }
 
 .menu-item.active {
-    background: rgba(0, 123, 255, 0.1);
-    border-left-color: #007bff;
-    color: #007bff;
+    background: rgba(255, 107, 53, 0.1);
+    border-left-color: #ff6b35;
+    color: #ff6b35;
 }
 
 .main-content {
     flex: 1;
-    padding: 2rem;
+    padding: 1.5rem;
     overflow-y: auto;
 }
 
@@ -114,36 +107,279 @@
     display: block;
 }
 
+.section-header h1 {
+    color: #ff6b35;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .stat-card {
     background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     border: 1px solid #e9ecef;
     text-align: center;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .stat-card h3 {
-    margin: 0 0 1rem 0;
-    color: #6c757d;
-    font-size: 0.9rem;
-    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    color: #ff6b35;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .stat-number {
-    font-size: 2.5rem;
+    font-size: 24px;
     font-weight: 700;
-    color: #007bff;
+    color: #2c3e50;
     margin: 0;
+}
+
+.client-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-message {
+    background: #90EE90;
+    color: #2c3e50;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-message:hover {
+    background: #7FDD7F;
+}
+
+/* Profile Form Styles */
+.profile-form {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #ff6b35;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background: #f8f9fa;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ff6b35;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+}
+
+.btn-save {
+    background: #90EE90;
+    color: #2c3e50;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.btn-save:hover {
+    background: #7FDD7F;
+}
+
+.password-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid #ff6b35;
+}
+
+.password-section h4 {
+    color: #ff6b35;
+    font-size: 14px;
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+}
+
+/* Tours and Rentals Grid */
+#tours-grid, #rentals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.item-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: fit-content;
+}
+
+.item-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.item-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.item-card h3 {
+    font-size: 14px;
+    margin: 0.75rem 0.75rem 0.5rem 0.75rem;
+    color: #ff6b35;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.item-card p {
+    margin: 0.25rem 0.75rem;
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.3;
+}
+
+.item-card p:first-of-type {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.action-buttons {
+    padding: 0.75rem;
+    border-top: 1px solid #f1f3f4;
+    margin-top: 0.25rem;
+}
+
+.btn-book {
+    width: 100%;
+    background: #90EE90;
+    color: #2c3e50;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-book:hover {
+    background: #7FDD7F;
+}
+
+.btn-add {
+    background: #90EE90;
+    color: #2c3e50;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-add:hover {
+    background: #7FDD7F;
+}
+
+@media (max-width: 1200px) {
+    #tours-grid, #rentals-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    #tours-grid, #rentals-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -164,15 +400,16 @@
     
     .menu-item {
         white-space: nowrap;
-        padding: 0.75rem 1rem;
+        padding: 0.5rem 0.75rem;
         border-left: none;
         border-bottom: 3px solid transparent;
+        font-size: 13px;
     }
     
     .menu-item:hover,
     .menu-item.active {
         border-left: none;
-        border-bottom-color: #007bff;
+        border-bottom-color: #ff6b35;
     }
     
     .main-content {
@@ -184,10 +421,105 @@
     }
     
     .nav-menu {
-        gap: 1rem;
+        gap: 0.75rem;
     }
     
     .nav-menu span {
-        display: none;
+        font-size: 12px;
+    }
+    
+    .nav-logo h2 {
+        font-size: 13px;
+    }
+    
+    .logout-btn {
+        font-size: 12px;
+        padding: 0.1rem 0.4rem;
+        max-width: 60px;
+        overflow: hidden;
+    }
+    
+    .section-header h1 {
+        font-size: 13px;
+    }
+    
+    .stat-number {
+        font-size: 20px;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+        min-height: 80px;
+    }
+    
+    .stat-card h3 {
+        font-size: 11px;
+    }
+    
+    .btn-message {
+        width: 100%;
+        font-size: 12px;
+        padding: 0.6rem 1rem;
+    }
+    
+    #tours-grid, #rentals-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .item-card img {
+        height: 100px;
+    }
+    
+    .item-card h3 {
+        font-size: 13px;
+    }
+    
+    .item-card p {
+        font-size: 11px;
+    }
+    
+    .btn-book {
+        font-size: 11px;
+    }
+    
+    .profile-form {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-group label {
+        font-size: 12px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 13px;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn-cancel,
+    .btn-save {
+        width: 100%;
+        font-size: 12px;
+        padding: 0.6rem 1rem;
+    }
+    
+    .password-section {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .password-section h4 {
+        font-size: 13px;
     }
 }

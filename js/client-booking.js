@@ -84,30 +84,19 @@ async function displayRentalsTable(rentals) {
         const dailyRate = rental.dailyRate || 0;
         const quantity = rental.quantityAvailable || 0;
         
-        // Load images for this rental
-        let imageHtml = '';
-        try {
-            const response = await api.getImages('rental', rental.id);
-            if (response.images && response.images.length > 0) {
-                imageHtml = `<img src="${response.images[0]}" alt="${equipmentName}" style="width:100%;height:200px;object-fit:cover;margin-bottom:15px;border-radius:8px;">`;
-            }
-        } catch (error) {
-            console.log('No images found for rental:', equipmentName);
-        }
-        
         // Try to load actual images
-        let imageHtml = '<div class="image-placeholder" style="width:100%;height:200px;background:#f0f0f0;margin-bottom:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#666;">📸 Image</div>';
+        let rentalImageHtml = '<div class="image-placeholder" style="width:100%;height:200px;background:#f0f0f0;margin-bottom:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#666;">📸 Image</div>';
         try {
             const response = await api.getImages('rental', rental.id);
             if (response.images && response.images.length > 0) {
-                imageHtml = `<img src="${response.images[0]}" alt="${equipmentName}" style="width:100%;height:200px;object-fit:cover;margin-bottom:15px;border-radius:8px;">`;
+                rentalImageHtml = `<img src="${response.images[0]}" alt="${equipmentName}" style="width:100%;height:200px;object-fit:cover;margin-bottom:15px;border-radius:8px;">`;
             }
         } catch (error) {
             console.log('No images for rental:', equipmentName);
         }
         
         rentalCard.innerHTML = `
-            ${imageHtml}
+            ${rentalImageHtml}
             <h4>${equipmentName}</h4>
             <p>${description}</p>
             <div class="resource-details">

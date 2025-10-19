@@ -289,4 +289,19 @@ function toggleMobileMenu() {
     }
 }
 
+// Close menu when clicking on any link
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const navMenu = document.getElementById('nav-menu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (navMenu && menuBtn) {
+                navMenu.classList.remove('active');
+                menuBtn.classList.remove('active');
+            }
+        });
+    });
+});
+
 console.log('Backyard Adventures website loaded successfully!');

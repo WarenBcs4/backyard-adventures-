@@ -41,20 +41,20 @@
                 </div>
                 <div class="charts-grid">
                     <div class="chart-container">
-                        <h3>Monthly Revenue</h3>
-                        <canvas id="revenue-chart"></canvas>
-                    </div>
-                    <div class="chart-container">
                         <h3>Booking Types</h3>
                         <canvas id="booking-types-chart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>Daily Bookings</h3>
-                        <canvas id="daily-bookings-chart"></canvas>
+                        <h3>Payment Status</h3>
+                        <canvas id="payment-status-chart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>Customer Growth</h3>
-                        <canvas id="customer-growth-chart"></canvas>
+                        <h3>Tour Categories</h3>
+                        <canvas id="tour-categories-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Monthly Revenue</h3>
+                        <canvas id="monthly-revenue-chart"></canvas>
                     </div>
                 </div>
             </section>
@@ -115,31 +115,43 @@
                     <h1>Admin Profile</h1>
                 </div>
                 <form id="admin-profile-form" class="profile-form">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="admin-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="admin-email" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="admin-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="admin-email" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Phone</label>
                         <input type="tel" id="admin-phone" required>
                     </div>
-                    <div class="form-group">
-                        <label>Current Password</label>
-                        <input type="password" id="current-password">
+                    
+                    <div class="password-section">
+                        <h4>Change Password (Optional)</h4>
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" id="current-password" placeholder="Enter current password">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" id="new-password" placeholder="Enter new password">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" id="confirm-password" placeholder="Confirm new password">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>New Password</label>
-                        <input type="password" id="new-password">
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="loadAdminProfile()">Reset</button>
+                        <button type="submit" class="btn-save">Update Profile</button>
                     </div>
-                    <div class="form-group">
-                        <label>Confirm New Password</label>
-                        <input type="password" id="confirm-password">
-                    </div>
-                    <button type="submit">Update Profile</button>
                 </form>
             </section>
         </main>

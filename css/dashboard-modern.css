@@ -1,0 +1,266 @@
+/* Modern Dashboard Design */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Global Reset */
+* {
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    background-color: #FFFFFF;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #FFFFFF;
+    border-right: 1px solid #E6E7E9;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
+}
+
+.sidebar-brand {
+    padding: 24px 16px;
+    border-bottom: 1px solid #E6E7E9;
+    font-weight: 700;
+    font-size: 18px;
+    color: #000000;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #000000;
+    text-decoration: none;
+    min-height: 44px;
+    border-left: 4px solid transparent;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    border-left-color: #0A7AFF;
+    background: #FFFFFF;
+}
+
+.nav-item svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+}
+
+.sidebar-user {
+    padding: 16px;
+    border-top: 1px solid #E6E7E9;
+}
+
+.user-name {
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 8px;
+}
+
+.logout-btn {
+    background: #28A745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 16px;
+}
+
+.dashboard-header {
+    margin-bottom: 24px;
+}
+
+.dashboard-title {
+    font-weight: 700;
+    font-size: 24px;
+    color: #000000;
+    margin: 0;
+}
+
+/* Overview Cards */
+.overview-grid {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.overview-card {
+    background: #F7F8FA;
+    border: 1px solid #E6E7E9;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+}
+
+.card-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6B7280;
+    margin-bottom: 8px;
+}
+
+.card-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0A7AFF;
+    margin: 0;
+}
+
+/* Buttons */
+.btn-primary {
+    background: #FFFFFF;
+    color: #0A7AFF;
+    border: 1px solid #0A7AFF;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary {
+    background: #FFFFFF;
+    color: #6B7280;
+    border: 1px solid #E6E7E9;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 4px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #E6E7E9;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 420px) {
+    .sidebar {
+        width: 24%;
+        min-width: 80px;
+    }
+    
+    .main-content {
+        margin-left: 24%;
+        padding: 16px;
+    }
+    
+    .overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .nav-item span {
+        display: none;
+    }
+    
+    .sidebar-brand {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 421px) and (max-width: 767px) {
+    .sidebar {
+        width: 220px;
+    }
+    
+    .main-content {
+        margin-left: 220px;
+        padding: 24px;
+    }
+    
+    .overview-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 250px;
+    }
+    
+    .main-content {
+        margin-left: 250px;
+        padding: 32px;
+    }
+    
+    .overview-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    body {
+        font-size: 18px;
+    }
+}
+
+/* Hide mobile menu button */
+.mobile-menu-btn {
+    display: none !important;
+}
+
+/* Remove all existing shadows */
+.service-card,
+.stat-card,
+.booking-item,
+.payment-item,
+.message-item,
+.subscriber-item,
+.item-card,
+.gallery-item,
+.modal-content,
+.auth-form,
+.contact-content,
+.newsletter {
+    box-shadow: none !important;
+}
